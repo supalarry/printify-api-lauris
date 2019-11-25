@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  mysqlDB:
+    container_name: mysql-apache
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: lauris-printify
+      MYSQL_PASSWORD: 123qweasdzxc
+      MYSQL_DATABASE: products
+    ports:
+      - '3306:3306'
+  php:
+    container_name: php-apache
+    build:
+      dockerfile: Dockerfile
+      context: ./php
+    volumes:
+      - ./php:/var/www/html/
+    ports:
+      - '80:80'
+    depends_on:
+      - mysqlDB
+  phpMyAdmin:
+    container_name: php-my-admin
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysqlDB
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: mysqlDB
+      MYSQL_ROOT_PASSWORD: root
