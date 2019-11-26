@@ -1,0 +1,50 @@
+
+
+Adding a product: (POST)
+http://localhost/api/products/add.php
+
+{
+	"price": 10,
+	"productType": "socks",
+	"color": "yellow",
+	"size": "L"
+}
+
+{
+	"price": 30,
+	"productType": "hoodie",
+	"color": "black",
+	"size": "M"
+}
+
+{
+	"price": 20,
+	"productType": "t-shirt",
+	"color": "white",
+	"size": "XL"
+}
+
+-----------------------------------------------------------------
+
+View all products (GET)
+http://localhost/api/products/products.php
+
+View one product
+http://localhost/api/products/product.php?id=1
+
+-----------------------------------------------------------------
+
+Adding an order: (POST)
+http://localhost/api/products/create-order.php
+
+(product ID) : (quantity)
+{
+	"1": "2",
+	"2": "2"
+}
+
+Viewing orders (GET)
+http://localhost/api/products/view-orders.php
+
+Viewing orders that contain item of a specific type (GET)
+http://localhost/api/products/view-orders.php?type=socks

@@ -20,10 +20,5 @@ $product = new Product($db);
 // Get posted data
 $data = json_decode(file_get_contents("php://input"));
 
-$product->setValues($data->price, $data->productType, $data->color, $data->size);
-
-if ($product->createProduct()){
-  echo json_encode(array("message" => "Product created"));
-} else {
-  echo json_encode(array("message" => "Product was not created"));
-}
+$lastId = $product->insertOrderID();
+$product->insertOrderProducts($lastId, $data);

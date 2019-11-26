@@ -15,7 +15,7 @@ $db = $database->connect();
 $product = new Product($db);
 
 // product query
-$result = $product->getOrders();
+$result = $product->getProducts();
 $num = $result->rowCount();
 
 // check if any products
