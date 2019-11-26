@@ -1,5 +1,7 @@
 version: '3'
 
+# PUSH THIS IMAGE TO DOCKER HUB IN ADDITION TO SUBMITTING GITHUB REPO
+
 services:
   mysqlDB:
     container_name: mysql-apache
@@ -10,16 +12,18 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: lauris-printify
       MYSQL_PASSWORD: 123qweasdzxc
-      MYSQL_DATABASE: products
+      MYSQL_DATABASE: printify-products
     ports:
       - '3306:3306'
+    #volumes:
+    #  - ./data:/var/lib/mysql/data
   php:
     container_name: php-apache
     build:
       dockerfile: Dockerfile
       context: ./php
     volumes:
-      - ./php:/var/www/html/
+      - ./:/var/www/html/
     ports:
       - '80:80'
     depends_on:
