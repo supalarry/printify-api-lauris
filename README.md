@@ -75,7 +75,7 @@ View all products
 http://localhost/api/view-products.php
 
 
-### create-order.php
+### add-order.php
 
 POST request
 
