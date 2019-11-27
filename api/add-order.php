@@ -20,6 +20,8 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods');
 /* File containg class for connecting to mysql */
 require_once("../config/Database.php");
+/* File containing classes to manipulate products */
+require_once("../utils/ProductUtils.php");
 /* File containing classes to manipulate orders */
 require_once("../utils/OrderUtils.php");
 
@@ -27,11 +29,23 @@ $database = new Database();
 $connection = $database->connect();
 
 $orderUtils = new OrderUtils($connection);
+$productUtils = new ProductUtils($connection);
 
 /* Get posted data */
 $data = json_decode(file_get_contents("php://input"));
 
-$orderUtils->openOrder();
-$id = $orderUtils->lastOrderId();
-$orderUtils->insertProducts($id, $data);
-echo json_encode(array("message" => "Order $id has been created"));
+/* validate that the order has total price of at least 10 */
+$totalPrice = 0;
+
+foreach ($data as $productId => $quantity){
+  $productPrice = $productUtils->getProductPrice($productId);
+  $totalPrice += $productPrice * $quantity;
+}
+if ($totalPrice > 9){
+  $orderUtils->openOrder();
+  $id = $orderUtils->lastOrderId();
+  $orderUtils->insertProducts($id, $data);
+  echo json_encode(array("message" => "Order $id has been created"));
+} else {
+  echo json_encode(array("message" => "Order needs to have value of at least 10 euros"));
+}

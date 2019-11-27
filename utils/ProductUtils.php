@@ -61,6 +61,9 @@ class ProductUtils{
     $stmt = $this->connection->prepare($query);
     $stmt->bindParam(1, $id);
     $stmt->execute();
+    if ($stmt->rowCount() == 0){
+      echo json_encode(array("message" => "Incorrect product ID"));die;
+    }
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     extract($row);
     return ($price);
@@ -71,6 +74,9 @@ class ProductUtils{
     $stmt = $this->connection->prepare($query);
     $stmt->bindParam(1, $id);
     $stmt->execute();
+    if ($stmt->rowCount() == 0){
+      echo json_encode(array("message" => "Incorrect product type"));die;
+    }
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     extract($row);
     return ($productType);
