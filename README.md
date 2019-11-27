@@ -1,6 +1,18 @@
+----- PRINTIFY PRODUCT API -----
 This is an API which allows to add and view products.
 It is also possible to create order consisting of products and view orders.
 Below is each endpoint of the API and how to access it.
+
+------ INSTALLATION ------
+In root directory run 'docker-compose up'
+
+------ USAGE ------
+Endpoints can be accessed at port 80:
+http://localhost/api/endpoint
+phpMyAdmin can be accessed at port 8080 with username root and password root
+http://localhost:8080/
+
+----- ENDPOINTS -----
 
 /*
 ** add-product.php
@@ -34,7 +46,7 @@ Below is each endpoint of the API and how to access it.
 ** create-order.php
 ** POST request
 ** Add an order
-** http://localhost/api/create-order.php
+** http://localhost/api/add-order.php
 **
 ** {
 ** 	"1" (product ID) : "2" (quantity),

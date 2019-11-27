@@ -22,9 +22,9 @@ header('Access-Control-Allow-Methods: POST');
 /* Allow specific headers */
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods');
 /* File containg class for connecting to mysql */
-include_once("../config/Database.php");
+require_once("../config/Database.php");
 /* File containing classes to manipulate products*/
-include_once("../utils/ProductUtils.php");
+require_once("../utils/ProductUtils.php");
 
 $database = new Database();
 $connection = $database->connect();

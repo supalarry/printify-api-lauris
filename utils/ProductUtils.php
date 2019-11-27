@@ -2,7 +2,6 @@
 
 class ProductUtils{
   private $connection;
-
   /* Create object with connection to mysql */
   public function __construct($connection){
     $this->connection = $connection;
@@ -55,5 +54,25 @@ class ProductUtils{
     if ($stmt->rowCount() == 0)
       return (true);
     return (false);
+  }
+  /* Given an id of a product, get it's price */
+  public function getProductPrice($id){
+    $query = "SELECT * FROM products WHERE id=?";
+    $stmt = $this->connection->prepare($query);
+    $stmt->bindParam(1, $id);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+    return ($price);
+  }
+  /* Given an id of a product, get it's type */
+  public function getProductType($id){
+    $query = "SELECT * FROM products WHERE id=?";
+    $stmt = $this->connection->prepare($query);
+    $stmt->bindParam(1, $id);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+    return ($productType);
   }
 }

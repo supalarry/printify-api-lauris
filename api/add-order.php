@@ -2,7 +2,7 @@
 /*
 ** POST request
 ** Add an order
-** http://localhost/api/create-order.php
+** http://localhost/api/add-order.php
 **
 ** {
 ** 	"1" (product ID) : "2" (quantity),
@@ -19,9 +19,9 @@ header('Access-Control-Allow-Methods: POST');
 /* Allow specific headers */
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods');
 /* File containg class for connecting to mysql */
-include_once("../config/Database.php");
+require_once("../config/Database.php");
 /* File containing classes to manipulate orders */
-include_once("../utils/OrderUtils.php");
+require_once("../utils/OrderUtils.php");
 
 $database = new Database();
 $connection = $database->connect();

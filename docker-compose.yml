@@ -1,13 +1,13 @@
 version: '3'
 
-# PUSH THIS IMAGE TO DOCKER HUB IN ADDITION TO SUBMITTING GITHUB REPO
-
 services:
   mysqlDB:
     container_name: mysql-apache
     image: mysql:8.0
     command: --default-authentication-plugin=mysql_native_password
     restart: always
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: lauris-printify
