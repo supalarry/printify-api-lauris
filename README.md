@@ -40,7 +40,7 @@ http://localhost:8080/
 
 ## ENDPOINTS
 
-**add-product.php**
+### add-product.php
 
 POST request
 
@@ -56,7 +56,8 @@ http://localhost/api/add-product.php
 }
 ```
 
-**view-product.php**
+
+### view-product.php
 
 GET request
 
@@ -65,8 +66,7 @@ View one product by it's id
 http://localhost/api/view-product.php?id=1
 
 
-
-**view-products.php**
+### view-products.php
 
 GET request
 
@@ -75,8 +75,7 @@ View all products
 http://localhost/api/view-products.php
 
 
-
-**create-order.php**
+### create-order.php
 
 POST request
 
@@ -94,7 +93,7 @@ http://localhost/api/add-order.php
 ```
 
 
-**view-orders.php**
+### view-orders.php
 
 GET request
 
