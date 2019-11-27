@@ -58,7 +58,7 @@ class OrderUtils {
   /* indicate if order includes a product of some type */
   function productOfTypeIncluded($type, $products){
     foreach ($products as $product){
-      $productID = $product['id'];
+      $productID = $product['productID'];
       $query = "SELECT * FROM products WHERE productType=? AND id=?";
       $stmt = $this->connection->prepare($query);
       $stmt->bindParam(1, $type);
