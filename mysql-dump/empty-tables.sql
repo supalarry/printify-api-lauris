@@ -12,17 +12,11 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-SET GLOBAL event_scheduler = ON;
-CREATE EVENT [IF NOT EXIST] country_codes_counter_reset
+CREATE EVENT country_codes_counter_reset
 ON SCHEDULE EVERY 1 MINUTE
 STARTS CURRENT_TIMESTAMP
 DO
-UPDATE 'country_codes' SET 'requests' = 0;
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+UPDATE country_codes SET requests = 0;
 
 --
 -- Database: `printify-products`
@@ -110,7 +104,6 @@ COMMIT;
 --
 ALTER TABLE `orders`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 
 --
 -- Table structure for table `country_codes`
@@ -388,15 +381,11 @@ ALTER TABLE `country_codes`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
---
-
---
 -- AUTO_INCREMENT for table `country_codes`
 --
 ALTER TABLE `country_codes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
-COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
