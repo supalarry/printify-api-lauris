@@ -35,7 +35,10 @@ $productUtils = new ProductUtils($connection);
 
 /* Get posted data */
 $data = json_decode(file_get_contents("php://input"));
-
+if ($data == NULL){
+  echo json_encode(array("message" => "Invalid product"));
+  die;
+}
 /* Save posted values in productUtils object, to later create
 a query to submit an entry to mysql */
 

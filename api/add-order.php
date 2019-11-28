@@ -37,7 +37,10 @@ $productUtils = new ProductUtils($connection);
 
 /* Get posted data */
 $data = json_decode(file_get_contents("php://input"));
-
+if ($data == NULL){
+  echo json_encode(array("message" => "Invalid order"));
+  die;
+}
 /* validate that the order has total price of at least 10 */
 $totalPrice = 0;
 
