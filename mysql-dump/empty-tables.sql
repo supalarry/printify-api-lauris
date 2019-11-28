@@ -29,7 +29,8 @@ UPDATE country_codes SET requests = 0;
 --
 
 CREATE TABLE `orders` (
-  `id` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
