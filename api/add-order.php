@@ -73,26 +73,32 @@ function generateOrderDraft($id, $data){
   addInfoForOrderProducts($products);
   addTotalPrice($products);
   $pdf->SetFont('helvetica','B',12);
-  $pdf->Cell(40,-40, "Product ID");
-  $pdf->Cell(40,-40, "Type");
-  $pdf->Cell(40,-40, "Price");
-  $pdf->Cell(40,-40, "Quantity");
-  $pdf->Cell(40,-40, "Total price", 0, 1);
-  $pdf->Cell(40, 25, "", 0, 1);
+  $pdf->Cell(28,-40, "Product ID");
+  $pdf->Cell(28,-40, "Type");
+  $pdf->Cell(28,-40, "Color");
+  $pdf->Cell(28,-40, "Size");
+  $pdf->Cell(28,-40, "Price");
+  $pdf->Cell(28,-40, "Quantity");
+  $pdf->Cell(28,-40, "Total price", 0, 1);
+  $pdf->Cell(28, 25, "", 0, 1);
   $pdf->SetFont('helvetica','B', 10);
   $pdf->SetFont('');
   foreach ($products as $product){
     $productId = $product['productID'];
-    $productType = $product['prodctType'];
+    $productType = $product['productType'];
+    $productColor = $product['productColor'];
+    $productSize = $product['productSize'];
     $productPrice = $product['productPrice'];
     $productQuantity = $product['quantity'];
     $totalPrice = $product['totalPrice'];
     $orderPrice += $totalPrice;
-    $pdf->Cell(40, 5, "$productId");
-    $pdf->Cell(40, 5, "$productType");
-    $pdf->Cell(40, 5, "$productPrice");
-    $pdf->Cell(40, 5, "$productQuantity");
-    $pdf->Cell(40, 5, "$totalPrice", 0, 1);
+    $pdf->Cell(28, 5, "$productId");
+    $pdf->Cell(28, 5, "$productType");
+    $pdf->Cell(28, 5, "$productColor");
+    $pdf->Cell(28, 5, "$productSize");
+    $pdf->Cell(28, 5, "$productPrice");
+    $pdf->Cell(28, 5, "$productQuantity");
+    $pdf->Cell(28, 5, "$totalPrice", 0, 1);
   }
   $pdf->SetFont('helvetica','B',12);
   $pdf->Cell(40, 5, "Total order price $orderPrice $", 0, 1);
@@ -112,7 +118,9 @@ function addInfoForOrderProducts(&$products){
     unset($product["id"]);
     $price = $productUtils->getProductPrice($product['productID']);
     $product['productPrice'] = $price;
-    $product['prodctType'] = $productUtils->getProductType($product['productID']);
+    $product['productType'] = $productUtils->getProductType($product['productID']);
+    $product['productColor'] = $productUtils->getProductColor($product['productID']);
+    $product['productSize'] = $productUtils->getProductSize($product['productID']);
     $product['totalPrice'] = $product['quantity'] * $price;
   }
 }

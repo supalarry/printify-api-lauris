@@ -81,4 +81,30 @@ class ProductUtils{
     extract($row);
     return ($productType);
   }
+  /* Given an id of a product, get it's color */
+  public function getProductColor($id){
+    $query = "SELECT * FROM products WHERE id=?";
+    $stmt = $this->connection->prepare($query);
+    $stmt->bindParam(1, $id);
+    $stmt->execute();
+    if ($stmt->rowCount() == 0){
+      echo json_encode(array("message" => "Incorrect product type"));die;
+    }
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+    return ($color);
+  }
+  /* Given an id of a product, get it's size */
+  public function getProductSize($id){
+    $query = "SELECT * FROM products WHERE id=?";
+    $stmt = $this->connection->prepare($query);
+    $stmt->bindParam(1, $id);
+    $stmt->execute();
+    if ($stmt->rowCount() == 0){
+      echo json_encode(array("message" => "Incorrect product type"));die;
+    }
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+    return ($size);
+  }
 }

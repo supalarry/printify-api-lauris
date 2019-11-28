@@ -64,7 +64,9 @@ function addInfoForOrderProducts(&$products){
     unset($product["id"]);
     $price = $productUtils->getProductPrice($product['productID']);
     $product['productPrice'] = $price;
-    $product['prodctType'] = $productUtils->getProductType($product['productID']);
+    $product['productType'] = $productUtils->getProductType($product['productID']);
+    $product['productColor'] = $productUtils->getProductColor($product['productID']);
+    $product['productSize'] = $productUtils->getProductSize($product['productID']);
     $product['totalPrice'] = $product['quantity'] * $price;
   }
 }
