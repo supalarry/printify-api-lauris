@@ -11,7 +11,7 @@ header('Access-Control-Allow-Origin: *');
 /* Accept json for communication */
 header('Content-Type: application/json');
 /* Limits incoming traffic from a country */
-require_once("request-filter.php");
+require_once("../config/request-filter.php");
 /* File containg class for connecting to mysql */
 require_once("../config/Database.php");
 /* File containing classes to manipulate products */
