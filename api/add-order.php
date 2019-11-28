@@ -26,6 +26,8 @@ require_once("../config/Database.php");
 require_once("../utils/ProductUtils.php");
 /* File containing classes to manipulate orders */
 require_once("../utils/OrderUtils.php");
+/* Class to create order draft */
+require_once("../fpdf-library/fpdf.php");
 
 $database = new Database();
 $connection = $database->connect();
@@ -43,11 +45,83 @@ foreach ($data as $productId => $quantity){
   $productPrice = $productUtils->getProductPrice($productId);
   $totalPrice += $productPrice * $quantity;
 }
+
 if ($totalPrice > 9){
   $orderUtils->openOrder();
   $id = $orderUtils->lastOrderId();
   $orderUtils->insertProducts($id, $data);
-  echo json_encode(array("message" => "Order $id has been created"));
+  echo json_encode(array("message" => "Order $id has been created and draft saved."));
+  generateOrderDraft($id, $data);
 } else {
   echo json_encode(array("message" => "Order needs to have value of at least 10 euros"));
+  die;
+}
+
+function generateOrderDraft($id, $data){
+  global $orderUtils;
+  $dateCreated = date('Y-m-d');
+  $pdf = new FPDF();
+  $orderPrice = 0;
+
+  $pdf->AddPage();
+  $pdf->SetFont('helvetica','B',16);
+  $pdf->Image('../fpdf-library/printifyLogo.png',5,10,-350);
+  $pdf->Cell(50,60, "Order ID : $id");
+  $pdf->Cell(100,60, "Date created : $dateCreated", 0, 1);
+  $queryOrderedProducts = $orderUtils->queryOrderProducts($id);
+  $products = $queryOrderedProducts->fetchAll(PDO::FETCH_ASSOC);
+  addInfoForOrderProducts($products);
+  addTotalPrice($products);
+  $pdf->SetFont('helvetica','B',12);
+  $pdf->Cell(40,-40, "Product ID");
+  $pdf->Cell(40,-40, "Type");
+  $pdf->Cell(40,-40, "Price");
+  $pdf->Cell(40,-40, "Quantity");
+  $pdf->Cell(40,-40, "Total price", 0, 1);
+  $pdf->Cell(40, 25, "", 0, 1);
+  $pdf->SetFont('helvetica','B', 10);
+  $pdf->SetFont('');
+  foreach ($products as $product){
+    $productId = $product['productID'];
+    $productType = $product['prodctType'];
+    $productPrice = $product['productPrice'];
+    $productQuantity = $product['quantity'];
+    $totalPrice = $product['totalPrice'];
+    $orderPrice += $totalPrice;
+    $pdf->Cell(40, 5, "$productId");
+    $pdf->Cell(40, 5, "$productType");
+    $pdf->Cell(40, 5, "$productPrice");
+    $pdf->Cell(40, 5, "$productQuantity");
+    $pdf->Cell(40, 5, "$totalPrice", 0, 1);
+  }
+  $pdf->SetFont('helvetica','B',12);
+  $pdf->Cell(40, 5, "Total order price $orderPrice $", 0, 1);
+  $pdf->SetFont('helvetica','B', 10);
+  $pdf->SetFont('');
+  $pdf->MultiCell(80, 5, "https://printify.com/\nmerchantsupport@printify.com");
+  $filename = $dateCreated . "-ID-" . $id . ".pdf";
+  $pdf->Output("../order-drafts/$filename", 'F');
+}
+
+/* For each order's products add their price, type, and total price within an
+order for display purposes */
+function addInfoForOrderProducts(&$products){
+  global $productUtils;
+
+  foreach ($products as &$product){
+    unset($product["id"]);
+    $price = $productUtils->getProductPrice($product['productID']);
+    $product['productPrice'] = $price;
+    $product['prodctType'] = $productUtils->getProductType($product['productID']);
+    $product['totalPrice'] = $product['quantity'] * $price;
+  }
+}
+
+/* Calculate total price of an order and save it in order's own array */
+function addTotalPrice(&$products){
+  global $orderUtils;
+
+  $orderId = $products[0]['orderID'];
+  $orderPrice = $orderUtils->getOrderPrice($products);
+  array_push($products, array("total order $orderId price" => "$orderPrice"));
 }

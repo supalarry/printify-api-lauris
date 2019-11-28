@@ -45,6 +45,7 @@ if ($count > 0){
     if (isset($_GET['type']) && !$orderUtils->productOfTypeIncluded($_GET['type'], $products)){
       continue;
     }
+    // put these two functions in order utils and remove from add order
     addInfoForOrderProducts($products);
     addTotalPrice($products);
     array_push($orders['data'], $products);
