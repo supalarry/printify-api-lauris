@@ -1,9 +1,12 @@
 <?php
-
+/* set how many requests per minute from incoming country is allowed */
+$requestsPerMinuteLimit = 5;
+/* File containg class for connecting to mysql */
+require_once('../config/Database.php');
 /* create url for ipstack API call to find country code of visitor */
 $ipStackKey = "2ebc12290f47bb5f0bc58b9a9bb7d9cb";
-//$ipUser =  $_SERVER['REMOTE_ADDR'];
-$ipUser = "134.201.250.155";
+$ipUser =  $_SERVER['REMOTE_ADDR'];
+//$ipUser = "134.201.250.155"; // this is test IP from US.
 $ipStackUrl = "http://api.ipstack.com/" . $ipUser . "?access_key=" . $ipStackKey . "&fields=country_code";
 
 /* create curl resource to make HTTP request */
@@ -20,24 +23,25 @@ $countryCode = $responseDecoded->country_code;
 if (strlen($countryCode) < 1)
   $countryCode = "US";
 
-/*
-I could already setup a table beforehand with all the country codes, so there
-is no need to insert etc., just increase or decrease counter.
+/* Find out how many $requests from $countryCode have been made */
+$database = new Database();
+$connection = $database->connect();
+$query = "SELECT * FROM country_codes WHERE country = ?";
+$stmt = $connection->prepare($query);
+$stmt->bindParam(1, $countryCode);
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+extract($row);
 
-Now we need to setup mysql for country code and increase counter field by 1.
-If the counter is already X, then do not allow the request.
-Finally, we need to have a mechanism to check when was first request made,
-and if it is X amount of seconds, then clear the counter.
-
-
-check mysql events to essentially set requests for all countries to 0 every x seconds
-set up table with all country codes with requests of 0 by default
-when app starts send a query to specify refresh time for database/ THIS SET MANUALLY IF YOU WANT
-if a request is made and limit is hit, do not allow service/maybe timeout is possible until refresh happens
-
-so if we allow 50 requests per 10 seconds, every 10 seconds requests go to 0 and if 51st one
-arrives then 50 is already there and we do not serve it.
-*/
-
+/* If $requests is less than $requestsPerMinuteLimit, allow traffic. Otherwise exit. */
+if ($requests < $requestsPerMinuteLimit){
+  $query = "UPDATE country_codes SET requests = requests + 1 WHERE country = ?";
+  $stmt = $connection->prepare($query);
+  $stmt->bindParam(1, $countryCode);
+  $stmt->execute();
+} else {
+  echo json_encode(array("message" => "$requestsPerMinuteLimit requests allowed per minute from $countryCode"));
+  die;
+}
 /* close curl resource */
 curl_close($curl);

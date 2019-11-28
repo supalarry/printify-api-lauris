@@ -18,6 +18,8 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST');
 /* Allow specific headers */
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods');
+/* Limits incoming traffic from a country */
+require_once("request-filter.php");
 /* File containg class for connecting to mysql */
 require_once("../config/Database.php");
 /* File containing classes to manipulate products */
