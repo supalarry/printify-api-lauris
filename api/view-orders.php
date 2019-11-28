@@ -45,37 +45,11 @@ if ($count > 0){
     if (isset($_GET['type']) && !$orderUtils->productOfTypeIncluded($_GET['type'], $products)){
       continue;
     }
-    // put these two functions in order utils and remove from add order
-    addInfoForOrderProducts($products);
-    addTotalPrice($products);
+    $productUtils->addInfoForOrderProducts($products);
+    $orderUtils->addTotalPrice($products);
     array_push($orders['data'], $products);
   }
   echo json_encode($orders);
 } else {
   echo json_encode(array("message" => "No orders found"));
-}
-
-/* For each order's products add their price, type, and total price within an
-order for display purposes */
-function addInfoForOrderProducts(&$products){
-  global $productUtils;
-
-  foreach ($products as &$product){
-    unset($product["id"]);
-    $price = $productUtils->getProductPrice($product['productID']);
-    $product['productPrice'] = $price;
-    $product['productType'] = $productUtils->getProductType($product['productID']);
-    $product['productColor'] = $productUtils->getProductColor($product['productID']);
-    $product['productSize'] = $productUtils->getProductSize($product['productID']);
-    $product['totalPrice'] = $product['quantity'] * $price;
-  }
-}
-
-/* Calculate total price of an order and save it in order's own array */
-function addTotalPrice(&$products){
-  global $orderUtils;
-
-  $orderId = $products[0]['orderID'];
-  $orderPrice = $orderUtils->getOrderPrice($products);
-  array_push($products, array("total order $orderId price" => "$orderPrice"));
 }

@@ -61,6 +61,7 @@ if ($totalPrice > 9){
 }
 
 function generateOrderDraft($id, $data){
+  global $productUtils;
   global $orderUtils;
   $dateCreated = date('Y-m-d');
   $pdf = new FPDF();
@@ -73,8 +74,8 @@ function generateOrderDraft($id, $data){
   $pdf->Cell(100,60, "Date created : $dateCreated", 0, 1);
   $queryOrderedProducts = $orderUtils->queryOrderProducts($id);
   $products = $queryOrderedProducts->fetchAll(PDO::FETCH_ASSOC);
-  addInfoForOrderProducts($products);
-  addTotalPrice($products);
+  $productUtils->addInfoForOrderProducts($products);
+  $orderUtils->addTotalPrice($products);
   $pdf->SetFont('helvetica','B',12);
   $pdf->Cell(28,-40, "Product ID");
   $pdf->Cell(28,-40, "Type");
@@ -110,29 +111,4 @@ function generateOrderDraft($id, $data){
   $pdf->MultiCell(80, 5, "https://printify.com/\nmerchantsupport@printify.com");
   $filename = $dateCreated . "-ID-" . $id . ".pdf";
   $pdf->Output("../order-drafts/$filename", 'F');
-}
-
-/* For each order's products add their price, type, and total price within an
-order for display purposes */
-function addInfoForOrderProducts(&$products){
-  global $productUtils;
-
-  foreach ($products as &$product){
-    unset($product["id"]);
-    $price = $productUtils->getProductPrice($product['productID']);
-    $product['productPrice'] = $price;
-    $product['productType'] = $productUtils->getProductType($product['productID']);
-    $product['productColor'] = $productUtils->getProductColor($product['productID']);
-    $product['productSize'] = $productUtils->getProductSize($product['productID']);
-    $product['totalPrice'] = $product['quantity'] * $price;
-  }
-}
-
-/* Calculate total price of an order and save it in order's own array */
-function addTotalPrice(&$products){
-  global $orderUtils;
-
-  $orderId = $products[0]['orderID'];
-  $orderPrice = $orderUtils->getOrderPrice($products);
-  array_push($products, array("total order $orderId price" => "$orderPrice"));
 }

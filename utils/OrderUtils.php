@@ -69,4 +69,10 @@ class OrderUtils {
     }
     return (false);
   }
+  /* Calculate total price of an order and save it in order's own array */
+  function addTotalPrice(&$products){
+    $orderId = $products[0]['orderID'];
+    $orderPrice = $this->getOrderPrice($products);
+    array_push($products, array("total order $orderId price" => "$orderPrice"));
+  }
 }

@@ -107,4 +107,17 @@ class ProductUtils{
     extract($row);
     return ($size);
   }
+  /* For each order's products add their price, type, and total price within an
+  order for display purposes */
+  function addInfoForOrderProducts(&$products){
+    foreach ($products as &$product){
+      unset($product["id"]);
+      $price = $this->getProductPrice($product['productID']);
+      $product['productPrice'] = $price;
+      $product['productType'] = $this->getProductType($product['productID']);
+      $product['productColor'] = $this->getProductColor($product['productID']);
+      $product['productSize'] = $this->getProductSize($product['productID']);
+      $product['totalPrice'] = $product['quantity'] * $price;
+    }
+  }
 }
