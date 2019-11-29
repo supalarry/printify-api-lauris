@@ -23,7 +23,7 @@ printify-api-lauris
 ├── mysql-dump [file with 4 empty tables - products, orders, orders_products, country_codes]
 ├── order-drafts [order invoices are saved here in pdf form]
 ├── php-apache [Dockerfile for php running on apache with mysqli, pdo support]
-├── utils [two classes with functionality to manipulate 3 tables within printify-products database]
+├── utils [two classes with functionality to manipulate 4 tables within printify-products database]
 .gitignore
 README.md
 docker-compose.yml [used to create images for php, mysql, phpmyadmin and launch them]
