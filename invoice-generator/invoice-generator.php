@@ -2,7 +2,7 @@
 /* Class to create order draft */
 require_once("fpdf.php");
 /* Function generating Printify invoice of the order */
-function generateOrderDraft($id, $data){
+function generateOrderDraft($id, $data, $countryCode){
   global $productUtils;
   global $orderUtils;
   $dateCreated = date('Y-m-d');
@@ -13,7 +13,8 @@ function generateOrderDraft($id, $data){
   $pdf->SetFont('helvetica','B',16);
   $pdf->Image('/var/www/html/invoice-generator/printifyLogo.png',5,10,-350);
   $pdf->Cell(50,60, "Order ID : $id");
-  $pdf->Cell(100,60, "Date created : $dateCreated", 0, 1);
+  $pdf->Cell(80,60, "Date created : $dateCreated");
+  $pdf->Cell(100,60, "Order country : $countryCode", 0, 1);
   $queryOrderedProducts = $orderUtils->queryOrderProducts($id);
   $products = $queryOrderedProducts->fetchAll(PDO::FETCH_ASSOC);
   $productUtils->addInfoForOrderProducts($products);

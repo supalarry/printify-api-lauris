@@ -54,7 +54,7 @@ if ($totalPrice > 9){
   $id = $orderUtils->lastOrderId();
   $orderUtils->insertProducts($id, $data);
   echo json_encode(array("message" => "Order $id has been created and draft saved."));
-  generateOrderDraft($id, $data);
+  generateOrderDraft($id, $data, $countryCode);
 } else {
   echo json_encode(array("message" => "Order needs to have value of at least 10 euros"));
   die;
