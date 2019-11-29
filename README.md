@@ -20,7 +20,7 @@ printify-api-lauris
     ├── Database.php [file to set up connection with mysql database within docker container]
     ├── request-filter.php [limits possible requests from a country]
 ├── invoice-generator [files for generating order invoice after submitting order to API]
-├── mysql-dump [file with 3 empty tables - products, orders, orders_products]
+├── mysql-dump [file with 4 empty tables - products, orders, orders_products, country_codes]
 ├── order-drafts [order invoices are saved here in pdf form]
 ├── php-apache [Dockerfile for php running on apache with mysqli, pdo support]
 ├── utils [two classes with functionality to manipulate 3 tables within printify-products database]
