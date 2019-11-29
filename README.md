@@ -11,8 +11,17 @@ Below is each endpoint of the API and how to access it.
 ```
 printify-api-lauris
 ├── api [source files for each endpoint]
-├── config [file to set up connection with mysql database within docker container]
+    ├── add-order.php [endpoint for adding an order]
+    ├── add-product.php [endpoint for adding a product]
+    ├── view-orders.php [endpoint for viewing orders]
+    ├── view-product.php [endpoint for viewing a specific product]
+    ├── view-products.php [endpoint for viewing all products]
+├── config
+    ├── Database.php [file to set up connection with mysql database within docker container]
+    ├── request-filter.php [limits possible requests from a country]
+├── invoice-generator [files for generating order invoice after submitting order to API]
 ├── mysql-dump [file with 3 empty tables - products, orders, orders_products]
+├── order-drafts [order invoices are saved here in pdf form]
 ├── php-apache [Dockerfile for php running on apache with mysqli, pdo support]
 ├── utils [two classes with functionality to manipulate 3 tables within printify-products database]
 .gitignore
@@ -105,3 +114,10 @@ Viewing orders that contain item of a specific type of product
 
 http://localhost/api/view-orders.php?type=socks
 
+## RESTRICTING CONNECTIONS
+
+By default, it is set that in 1 minute 5 requests from country are allowed.
+
+To change that, go to **config/request-filter.php** and change **$requestsPerMinuteLimit = 5;**
+
+to your desired value.
